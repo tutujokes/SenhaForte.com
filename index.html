@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SenhaForte.com – Gerador de Senhas Seguras</title>
+
+  <!-- TailwindCSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome para ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+
+  <!-- Fontes personalizadas -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter&family=Roboto&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+    <!-- Cabeçalho -->
+<header class="w-full max-w-xl text-center mb-10">
+  <img 
+    src="src/logo.png" 
+    alt="Seu Logo" 
+    class="w-64 mx-auto"
+  />
+  <p class="text-lg text-[#636e72] select-none">Gere senhas seguras em segundos</p>
+</header>
+</head>
+<body class="bg-[#f8f9fa] text-[#2d3436] min-h-screen flex flex-col items-center px-4 py-8">
+  <!-- Conteúdo principal -->
+  <main class="w-full max-w-xl bg-white rounded-lg shadow-md p-6 flex flex-col gap-6">
+    <!-- Campo de exibição e botão de cópia -->
+    <div class="relative">
+      <input
+        type="text"
+        id="passwordDisplay"
+        readonly
+        aria-label="Senha gerada"
+        class="w-full bg-white border border-[#dfe6e9] rounded-md py-3 px-4 font-mono text-lg text-[#2d3436] select-all focus:outline-none focus:ring-2 focus:ring-[#0984e3]"
+        placeholder="Sua senha aparecerá aqui"
+      />
+      <button
+        id="copyBtn"
+        aria-label="Copiar senha"
+        class="absolute right-2 top-1/2 -translate-y-1/2 bg-[#0984e3] hover:bg-[#74b9ff] text-white rounded-md px-3 py-2 shadow-md transition-colors flex items-center gap-2"
+        type="button"
+      >
+        <i class="fas fa-copy"></i> Copiar Senha
+      </button>
+    </div>
+
+    <!-- Controle de tamanho da senha -->
+    <div class="flex flex-col gap-1">
+      <label for="lengthRange" class="font-semibold select-none">
+        Tamanho da senha: <span id="lengthValue" class="text-[#0984e3]">16</span>
+      </label>
+      <input
+        type="range"
+        id="lengthRange"
+        min="8"
+        max="32"
+        value="16"
+        class="w-full accent-[#0984e3]"
+        aria-label="Tamanho da senha"
+      />
+    </div>
+
+    <!-- Opções de composição da senha -->
+    <fieldset class="flex flex-wrap gap-4 justify-between" aria-label="Opções de caracteres">
+      <label class="flex items-center gap-2 cursor-pointer select-none">
+        <input type="checkbox" id="uppercase" checked class="accent-[#0984e3]" />
+        Letras maiúsculas
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer select-none">
+        <input type="checkbox" id="lowercase" checked class="accent-[#0984e3]" />
+        Letras minúsculas
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer select-none">
+        <input type="checkbox" id="numbers" checked class="accent-[#0984e3]" />
+        Números
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer select-none">
+        <input type="checkbox" id="symbols" checked class="accent-[#0984e3]" />
+        Símbolos
+      </label>
+    </fieldset>
+
+    <!-- Botão de geração -->
+    <button
+      id="generateBtn"
+      type="button"
+      class="w-full bg-[#0984e3] hover:bg-[#74b9ff] text-white font-semibold rounded-md py-3 shadow-md transition-colors flex justify-center items-center gap-2"
+    >
+      <i class="fas fa-sync-alt animate-spin-slow" style="animation-play-state: paused;" id="spinnerIcon"></i>
+      Gerar Senha
+    </button>
+
+    <!-- Mensagem de feedback -->
+    <p id="feedbackMsg" class="text-[#0984e3] font-semibold text-center opacity-0 transition-opacity select-none" role="alert" aria-live="polite"></p>
+  </main>
+
+  <!-- Rodapé com link para GitHub -->
+  <footer class="w-full max-w-xl text-center mt-12 mb-4 text-[#b2bec3] text-sm select-none">
+    <a href="https://github.com/tutujokes" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 hover:text-[#0984e3] transition-colors">
+      © 2025 SenhaForte.com
+      <i class="fab fa-github text-sm"></i>
+      <span>Arthur Henrique</span>
+    </a>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/script.js"></script>
+</body>
+</html>
