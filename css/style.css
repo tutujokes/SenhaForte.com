@@ -10,3 +10,18 @@ body {
 .animate-spin-slow {
   animation: spin-slow 2s linear infinite;
 }
+
+:root {
+  --bg: #f8f9fa;
+  --text: #2d3436;
+}
+
+.dark {
+  --bg: #1e1e1e;
+  --text: #d4d4d4;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+}
