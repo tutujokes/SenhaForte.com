@@ -7,6 +7,12 @@
 
   <!-- TailwindCSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+  
+  tailwind.config = {
+    darkMode: 'class'
+  }
+</script>
 
   <!-- Font Awesome para ícones -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
@@ -15,103 +21,93 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter&family=Roboto&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
     <!-- Cabeçalho -->
-<header class="w-full max-w-xl text-center mb-10">
-  <img 
-    src="src/logo.png" 
-    alt="Seu Logo" 
-    class="w-64 mx-auto"
-  />
-  <p class="text-lg text-[#636e72] select-none">Gere senhas seguras em segundos</p>
+    <p class="text-lg text-[#636e72] select-none">
+      Gere senhas <span class="font-semibold italic">seguras</span>, em <span class="font-semibold italic">segundos</span>.
+    </p>
+    
 </header>
 </head>
-<body class="bg-[#f8f9fa] text-[#2d3436] min-h-screen flex flex-col items-center px-4 py-8">
+<body class="min-h-screen flex flex-col items-center px-4 py-8">
+  
   <!-- Conteúdo principal -->
-  <main class="w-full max-w-xl bg-white rounded-lg shadow-md p-6 flex flex-col gap-6">
-    <!-- Campo de exibição e botão de cópia -->
+ <div id="app">
+  <header class="w-full max-w-xl text-center mb-10">
+    <img 
+    :src="isDark ? 'src/logodark.png' : 'src/logo.png'" 
+    alt="Logo SenhaForte.com" 
+    class="w-64 mx-auto"
+  />
+  <!-- Botão de tema escuro/claro -->
+<button @click="toggleTheme"
+class="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center transition-colors shadow-md z-50"
+:class="isDark ? 'bg-white text-yellow-500 hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'">
+<i :class="isDark ? 'fas fa-sun' : 'fas fa-moon'"></i>
+</button>
+
+  <main class="w-full max-w-xl rounded-lg shadow-md p-6 flex flex-col gap-6"
+  :class="isDark ? 'bg-[#252526]' : 'bg-white'">
+    
     <div class="relative">
-      <input
-        type="text"
-        id="passwordDisplay"
-        readonly
-        aria-label="Senha gerada"
-        class="w-full bg-white border border-[#dfe6e9] rounded-md py-3 px-4 font-mono text-lg text-[#2d3436] select-all focus:outline-none focus:ring-2 focus:ring-[#0984e3]"
-        placeholder="Sua senha aparecerá aqui"
-      />
-      <button
-        id="copyBtn"
-        aria-label="Copiar senha"
-        class="absolute right-2 top-1/2 -translate-y-1/2 bg-[#0984e3] hover:bg-[#74b9ff] text-white rounded-md px-3 py-2 shadow-md transition-colors flex items-center gap-2"
-        type="button"
-      >
+      <input type="text" v-model="password" readonly placeholder="Sua senha aparecerá aqui"
+        class="w-full bg-white border border-[#dfe6e9] rounded-md py-3 px-4 font-mono text-lg text-[#2d3436] select-all focus:outline-none focus:ring-2 focus:ring-[#0984e3]" />
+      <button @click="copyPassword" class="absolute right-2 top-1/2 -translate-y-1/2 bg-[#0984e3] hover:bg-[#74b9ff] text-white rounded-md px-3 py-2 shadow-md transition-colors flex items-center gap-2">
         <i class="fas fa-copy"></i> Copiar Senha
       </button>
     </div>
 
-    <!-- Controle de tamanho da senha -->
     <div class="flex flex-col gap-1">
-      <label for="lengthRange" class="font-semibold select-none">
-        Tamanho da senha: <span id="lengthValue" class="text-[#0984e3]">16</span>
+      <label class="font-semibold select-none">
+        Tamanho da senha: <span class="text-[#0984e3]">{{ length }}</span>
       </label>
-      <input
-        type="range"
-        id="lengthRange"
-        min="8"
-        max="32"
-        value="16"
-        class="w-full accent-[#0984e3]"
-        aria-label="Tamanho da senha"
-      />
+      <input type="range" v-model="length" min="8" max="32"
+        class="w-full accent-[#0984e3]" />
     </div>
 
-    <!-- Opções de composição da senha -->
-    <fieldset class="flex flex-wrap gap-4 justify-between" aria-label="Opções de caracteres">
+    <fieldset class="flex flex-wrap gap-4 justify-between">
       <label class="flex items-center gap-2 cursor-pointer select-none">
-        <input type="checkbox" id="uppercase" checked class="accent-[#0984e3]" />
-        Letras maiúsculas
+        <input type="checkbox" v-model="useUpper" class="accent-[#0984e3]" /> Letras maiúsculas
       </label>
       <label class="flex items-center gap-2 cursor-pointer select-none">
-        <input type="checkbox" id="lowercase" checked class="accent-[#0984e3]" />
-        Letras minúsculas
+        <input type="checkbox" v-model="useLower" class="accent-[#0984e3]" /> Letras minúsculas
       </label>
       <label class="flex items-center gap-2 cursor-pointer select-none">
-        <input type="checkbox" id="numbers" checked class="accent-[#0984e3]" />
-        Números
+        <input type="checkbox" v-model="useNumbers" class="accent-[#0984e3]" /> Números
       </label>
       <label class="flex items-center gap-2 cursor-pointer select-none">
-        <input type="checkbox" id="symbols" checked class="accent-[#0984e3]" />
-        Símbolos
+        <input type="checkbox" v-model="useSymbols" class="accent-[#0984e3]" /> Símbolos
       </label>
     </fieldset>
 
-    <!-- Botão de geração -->
-    <button
-      id="generateBtn"
-      type="button"
-      class="w-full bg-[#0984e3] hover:bg-[#74b9ff] text-white font-semibold rounded-md py-3 shadow-md transition-colors flex justify-center items-center gap-2"
-    >
-      <i class="fas fa-sync-alt animate-spin-slow" style="animation-play-state: paused;" id="spinnerIcon"></i>
+    <button @click="generate"
+      :disabled="spinnerRunning"
+      :class="spinnerRunning ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#0984e3] hover:bg-[#74b9ff]'"
+      class="w-full text-white font-semibold rounded-md py-3 shadow-md transition-colors flex justify-center items-center gap-2">
+      <i class="fas fa-sync-alt animate-spin-slow" :style="{ 'animation-play-state': spinnerRunning ? 'running' : 'paused' }"></i>
       Gerar Senha
     </button>
 
-    <!-- Mensagem de feedback -->
-    <p id="feedbackMsg" class="text-[#0984e3] font-semibold text-center opacity-0 transition-opacity select-none" role="alert" aria-live="polite"></p>
+    <p v-if="feedbackMsg" class="text-[#0984e3] font-semibold text-center transition-opacity select-none">{{ feedbackMsg }}</p>
+
+    <section class="w-full mt-6">
+      <button @click="showHistory = !showHistory"
+        class="px-4 py-2 bg-[#0984e3] text-white font-medium rounded-md shadow-md hover:bg-[#74b9ff] transition-colors">
+        {{ showHistory ? 'Ocultar histórico de senhas' : 'Mostrar histórico de senhas' }}
+      </button>
+
+      <div v-if="showHistory">
+        <ul class="list-disc list-inside mt-2">
+          <li v-for="(item, index) in history" :key="index" class="font-mono text-sm text-[#2d3436] bg-[#e8e8e8] px-2 py-1 rounded mb-2">
+            {{ item }}
+          </li>
+        </ul>
+      </div>
+    </section>
   </main>
-<section class="w-full max-w-xl mt-6">
-  <button
-  id="toggleHistoryBtn"
-  class="px-4 py-2 bg-[#0984e3] text-white font-medium rounded-md shadow-md hover:bg-[#74b9ff] transition-colors"
-  type="button"
->
-  Mostrar histórico de senhas
-</button>
-  <div id="historyContainer" class="hidden">
-    <ul id="historyList" class="list-disc list-inside mt-2"></ul>
-  </div>
-</section>
+</div>
   
   <!-- Rodapé com link para GitHub -->
-  <footer class="w-full max-w-xl text-center mt-12 mb-4 text-[#b2bec3] text-sm select-none">
-    <a href="https://github.com/tutujokes" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 hover:text-[#0984e3] transition-colors">
+  <footer class="w-full max-w-xl text-center mt-auto mb-auto text-[#b2bec3] text-sm select-none">
+    <a href="https://github.com/tutujokes" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 hover:text-[#6e6e6e] transition-colors">
       © 2025 SenhaForte.com
       <i class="fab fa-github text-sm"></i>
       <span>Arthur Henrique</span>
@@ -119,6 +115,7 @@
   </footer>
 
   <!-- Scripts -->
-  <script src="js/script.js"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>
