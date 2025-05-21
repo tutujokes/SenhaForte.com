@@ -96,7 +96,19 @@
     <!-- Mensagem de feedback -->
     <p id="feedbackMsg" class="text-[#0984e3] font-semibold text-center opacity-0 transition-opacity select-none" role="alert" aria-live="polite"></p>
   </main>
-
+<section class="w-full max-w-xl mt-6">
+  <button
+  id="toggleHistoryBtn"
+  class="px-4 py-2 bg-[#0984e3] text-white font-medium rounded-md shadow-md hover:bg-[#74b9ff] transition-colors"
+  type="button"
+>
+  Mostrar histórico de senhas
+</button>
+  <div id="historyContainer" class="hidden">
+    <ul id="historyList" class="list-disc list-inside mt-2"></ul>
+  </div>
+</section>
+  
   <!-- Rodapé com link para GitHub -->
   <footer class="w-full max-w-xl text-center mt-12 mb-4 text-[#b2bec3] text-sm select-none">
     <a href="https://github.com/tutujokes" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 hover:text-[#0984e3] transition-colors">

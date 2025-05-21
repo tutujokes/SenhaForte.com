@@ -9,6 +9,8 @@ const symbols = document.getElementById('symbols');
 const generateBtn = document.getElementById('generateBtn');
 const feedbackMsg = document.getElementById('feedbackMsg');
 const spinnerIcon = document.getElementById('spinnerIcon');
+const toggleBtn = document.getElementById('toggleHistoryBtn');
+const historyContainer = document.getElementById('historyContainer');
 
 // Conjuntos de caracteres
 const CHARS = {
@@ -41,13 +43,11 @@ function generatePassword(length, useUpper, useLower, useNumbers, useSymbols) {
 
   if (!charset) return '';
 
-  // Completa com caracteres aleatórios
   let password = guaranteed;
   while (password.length < length) {
     password.push(randomChar(charset));
   }
 
-  // Embaralha
   return password.sort(() => 0.5 - Math.random()).join('');
 }
 
@@ -66,6 +66,26 @@ function showFeedback(message) {
 function updateLengthDisplay() {
   lengthValue.textContent = lengthRange.value;
   lengthRange.setAttribute('aria-valuenow', lengthRange.value);
+}
+
+function savePasswordToHistory(password) {
+  const history = JSON.parse(localStorage.getItem('passwordHistory')) || [];
+  history.unshift(password);
+  if (history.length > 10) history.pop();
+  localStorage.setItem('passwordHistory', JSON.stringify(history));
+}
+
+function loadPasswordHistory() {
+  const history = JSON.parse(localStorage.getItem('passwordHistory')) || [];
+  const historyList = document.getElementById('historyList');
+  if (!historyList) return;
+  historyList.innerHTML = '';
+  history.forEach(pwd => {
+    const li = document.createElement('li');
+    li.textContent = pwd;
+    li.className = 'font-mono text-sm text-[#2d3436] bg-[#dfe6e9] px-2 py-1 rounded mb-1';
+    historyList.appendChild(li);
+  });
 }
 
 // Eventos
@@ -91,15 +111,32 @@ generateBtn.addEventListener('click', () => {
 
   spinnerIcon.style.animationPlayState = 'running';
   generateBtn.disabled = true;
+  generateBtn.classList.remove('bg-[#0984e3]', 'hover:bg-[#74b9ff]');
+  generateBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
 
   setTimeout(() => {
     const password = generatePassword(length, useUpper, useLower, useNumbers, useSymbols);
     passwordDisplay.value = password;
+
+    savePasswordToHistory(password);
+    loadPasswordHistory();
+
     spinnerIcon.style.animationPlayState = 'paused';
     generateBtn.disabled = false;
+    generateBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
+    generateBtn.classList.add('bg-[#0984e3]', 'hover:bg-[#74b9ff]');
   }, 300);
+});
+
+// Botão de mostrar/ocultar histórico
+toggleBtn.addEventListener('click', () => {
+  const isHidden = historyContainer.classList.toggle('hidden');
+  toggleBtn.textContent = isHidden ? 'Mostrar histórico de senhas' : 'Ocultar histórico de senhas';
 });
 
 // Inicializa
 updateLengthDisplay();
-window.addEventListener('load', () => generateBtn.click());
+window.addEventListener('load', () => {
+  generateBtn.click();
+  loadPasswordHistory();
+});
