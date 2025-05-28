@@ -1,5 +1,8 @@
 body {
   font-family: 'Inter', 'Roboto', Arial, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 0.2s ease, color 0.2s ease; /* Transição suave */
 }
 
 @keyframes spin-slow {
@@ -19,9 +22,4 @@ body {
 .dark {
   --bg: #1e1e1e;
   --text: #d4d4d4;
-}
-
-body {
-  background-color: var(--bg);
-  color: var(--text);
 }
